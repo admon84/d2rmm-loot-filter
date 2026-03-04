@@ -1,0 +1,41 @@
+{
+  "$schema": "../config-schema.json",
+  "name": "admon's D2R Loot Filter",
+  "description": "A loot filter mod for Diablo 2 Resurrected",
+  "author": "admon84",
+  "version": "0.1",
+  "website": "https://github.com/admon84/d2rmm-loot-filter",
+  "config": [
+    {
+      "id": "toggleall",
+      "name": "Toggle All",
+      "type": "section",
+      "allowToggleAll": true,
+      "defaultExpanded": true,
+      "description": "Toggles all mods",
+      "children": [    
+        {
+          "id": "itemNames",
+          "name": "Item Names (item-names.json)",
+          "type": "checkbox",
+          "defaultValue": true,
+          "description": "Modify item names"
+        },
+        {
+          "id": "itemNameaffixes",
+          "name": "Item Name Affixes (item-nameaffixes.json)",
+          "type": "checkbox",
+          "defaultValue": true,
+          "description": "Hide affixes like crude, low quality, etc."
+        },
+        {
+          "id": "itemRunes",
+          "name": "Item Runes (item-runes.json)",
+          "type": "checkbox",
+          "defaultValue": true,
+          "description": "Show large hitbox for high runes"
+        }
+     ]
+    }
+  ]
+}
