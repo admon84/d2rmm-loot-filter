@@ -1,4 +1,4 @@
-import { parseColorMarkers } from './color'
+import { parseColors } from './color'
 
 type ItemMod = {
   key: string
@@ -55,8 +55,8 @@ const itemNamesMods: ItemMod[] = [
     newName: '{lightblue}+{white}Perfect {lightblue}Diamond{white}'
   },
 
-  { key: 'skl', newName: '{gray1}+{white}Flawless {gray1}Skull{white}' },
-  { key: 'skz', newName: '{gray1}+{white}Perfect {gray1}Skull{white}' },
+  { key: 'skl', newName: '{gray2}+{white}Flawless {gray2}Skull{white}' },
+  { key: 'skz', newName: '{gray2}+{white}Perfect {gray2}Skull{white}' },
 
   // Health potions
   { key: 'hp1', newName: 'HP{red}1{white}' },
@@ -78,7 +78,7 @@ const itemNamesMods: ItemMod[] = [
 
   // Other potions
   { key: 'vps', newName: '{yellow}+{white}Stam' },
-  { key: 'yps', newName: '{darkgreen1}+{white}Anti' },
+  { key: 'yps', newName: '{darkgreen}+{white}Anti' },
   { key: 'wms', newName: '{blue}+{white}Thaw' },
 
   // Other
@@ -87,15 +87,16 @@ const itemNamesMods: ItemMod[] = [
 ]
 
 const itemNameaffixesMods: ItemMod[] = [
-  // Superior item + gray color
+  // Superior item +
   { key: 'Hiquality', newName: '{gray}+{white}' },
 
-  // Low quality items + gray color
+  // Low quality items -
   { key: 'Low Quality', newName: '{gray}-{white}' },
   { key: 'Damaged', newName: '{gray}-{white}' },
   { key: 'Cracked', newName: '{gray}-{white}' },
   { key: 'Crude', newName: '{gray}-{white}' },
 
+  // Gold
   { key: 'gld', newName: '{gold}g{white}' }
 ]
 
@@ -136,33 +137,30 @@ const applyTargets: ApplyTarget[] = [
 function applyMods(filePath: string, mods: ItemMod[], configKey: string) {
   if (!config[configKey]) {
     console.log(`Skipped ${filePath} (disabled in config)`)
-    return 0
+    return
   }
 
   const data = D2RMM.readJson(filePath)
   if (!Array.isArray(data)) {
     console.warn(`Skipped ${filePath} (expected JSON array)`)
-    return 0
+    return
   }
 
   let modifiedCount = 0
   const parsedNamesByKey = new Map<string, string>()
 
   for (const mod of mods) {
-    parsedNamesByKey.set(mod.key, parseColorMarkers(mod.newName))
+    parsedNamesByKey.set(mod.key, parseColors(mod.newName))
   }
 
   for (const row of data) {
-    if (typeof row !== 'object' || row === null || Array.isArray(row)) continue
+    if (!row || typeof row !== 'object' || Array.isArray(row)) continue
+    if (typeof row.Key !== 'string') continue
 
-    const record = row as Record<string, JSONData>
-    if (typeof record.Key !== 'string') continue
-
-    const replacement = parsedNamesByKey.get(record.Key)
+    const replacement = parsedNamesByKey.get(row.Key)
     if (replacement === undefined) continue
 
-    record.enUS = replacement
-    // console.log(`Modified ${filePath}: ${record.Key} -> "${replacement}"`)
+    row.enUS = replacement
     modifiedCount++
   }
 
@@ -170,15 +168,12 @@ function applyMods(filePath: string, mods: ItemMod[], configKey: string) {
     D2RMM.writeJson(filePath, data)
     console.log(`Saved ${modifiedCount} changes to ${filePath}`)
   }
-
-  return modifiedCount
 }
 
-function main() {
-  let totalMods = 0
+function install() {
   for (const target of applyTargets) {
-    totalMods += applyMods(target.filePath, target.mods, target.configKey)
+    applyMods(target.filePath, target.mods, target.configKey)
   }
 }
 
-main()
+install()

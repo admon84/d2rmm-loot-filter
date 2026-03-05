@@ -12,8 +12,8 @@
       "type": "section",
       "allowToggleAll": true,
       "defaultExpanded": true,
-      "description": "Toggles all mods",
-      "children": [    
+      "description": "Toggle all mods on/off",
+      "children": [
         {
           "id": "itemNames",
           "name": "Item Names (item-names.json)",
@@ -35,7 +35,7 @@
           "defaultValue": true,
           "description": "Show large hitbox for high runes"
         }
-     ]
+      ]
     }
   ]
 }
