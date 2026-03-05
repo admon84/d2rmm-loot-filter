@@ -5,12 +5,6 @@ type ItemMod = {
   newName: string
 }
 
-type ApplyTarget = {
-  filePath: string
-  mods: ItemMod[]
-  configKey: string
-}
-
 const itemNamesMods: ItemMod[] = [
   // Gas potions
   { key: 'gpl', newName: '' },
@@ -116,6 +110,12 @@ const itemRunesMods: ItemMod[] = [
   { key: 'r22', newName: '\n  Um Rune  \n' }
 ]
 
+type ApplyTarget = {
+  filePath: string
+  mods: ItemMod[]
+  configKey: string
+}
+
 const applyTargets: ApplyTarget[] = [
   {
     filePath: 'local/lng/strings/item-names.json',
@@ -134,7 +134,7 @@ const applyTargets: ApplyTarget[] = [
   }
 ]
 
-function applyMods(filePath: string, mods: ItemMod[], configKey: string) {
+function applyMods({ filePath, mods, configKey }: ApplyTarget) {
   if (!config[configKey]) {
     console.log(`Skipped ${filePath} (disabled in config)`)
     return
@@ -172,7 +172,7 @@ function applyMods(filePath: string, mods: ItemMod[], configKey: string) {
 
 function install() {
   for (const target of applyTargets) {
-    applyMods(target.filePath, target.mods, target.configKey)
+    applyMods(target)
   }
 }
 
