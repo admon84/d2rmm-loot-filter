@@ -1,7 +1,7 @@
 {
   "$schema": "../config-schema.json",
-  "name": "admon's D2R Loot Filter",
-  "description": "A loot filter mod for Diablo 2 Resurrected",
+  "name": "Loot Filter by admon84",
+  "description": "Loot filter mod for D2R.",
   "author": "admon84",
   "version": "0.1",
   "website": "https://github.com/admon84/d2rmm-loot-filter",

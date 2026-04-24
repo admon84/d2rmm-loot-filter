@@ -1,11 +1,11 @@
 import { parseColors } from './color'
 
-type ItemMod = {
+type StringMod = {
   key: string
   newName: string
 }
 
-const itemNamesMods: ItemMod[] = [
+const itemNamesMods: StringMod[] = [
   // Gas potions
   { key: 'gpl', newName: '' },
   { key: 'gpm', newName: '' },
@@ -80,7 +80,18 @@ const itemNamesMods: ItemMod[] = [
   { key: 'ear', newName: '{gray}Ear{white}' }
 ]
 
-const itemNameaffixesMods: ItemMod[] = [
+const uiMods: StringMod[] = [
+  {
+    key: 'HiqualityFormat',
+    newName: '%0%1'
+  },
+  {
+    key: 'LowqualityFormat',
+    newName: '%0%1'
+  }
+]
+
+const itemNameaffixesMods: StringMod[] = [
   // Superior item +
   { key: 'Hiquality', newName: '{gray}+{white}' },
 
@@ -94,7 +105,7 @@ const itemNameaffixesMods: ItemMod[] = [
   { key: 'gld', newName: '{gold}g{white}' }
 ]
 
-const itemRunesMods: ItemMod[] = [
+const itemRunesMods: StringMod[] = [
   // Larger hitbox for high runes
   { key: 'r33', newName: '\n  Zod Rune  \n' },
   { key: 'r32', newName: '\n  Cham Rune  \n' },
@@ -112,8 +123,8 @@ const itemRunesMods: ItemMod[] = [
 
 type ApplyTarget = {
   filePath: string
-  mods: ItemMod[]
-  configKey: string
+  mods: StringMod[]
+  configKey?: string
 }
 
 const applyTargets: ApplyTarget[] = [
@@ -123,19 +134,24 @@ const applyTargets: ApplyTarget[] = [
     configKey: 'itemNames'
   },
   {
+    filePath: 'local/lng/strings/item-runes.json',
+    mods: itemRunesMods,
+    configKey: 'itemRunes'
+  },
+  {
     filePath: 'local/lng/strings/item-nameaffixes.json',
     mods: itemNameaffixesMods,
     configKey: 'itemNameaffixes'
   },
   {
-    filePath: 'local/lng/strings/item-runes.json',
-    mods: itemRunesMods,
-    configKey: 'itemRunes'
+    filePath: 'local/lng/strings/ui.json',
+    mods: uiMods,
+    configKey: 'itemNameaffixes'
   }
 ]
 
 function applyMods({ filePath, mods, configKey }: ApplyTarget) {
-  if (!config[configKey]) {
+  if (configKey && !config[configKey]) {
     console.log(`Skipped ${filePath} (disabled in config)`)
     return
   }
